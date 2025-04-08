@@ -1,0 +1,27 @@
+{
+  "name": "360",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "dns-check": "node -e \"require('./index.js').getDnsRecords(process.argv[1])\""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@azure/arm-communication": "^4.1.0",
+    "@azure/arm-resources": "^6.0.0",
+    "@azure/identity": "^4.8.0",
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "fs-extra": "^11.3.0",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.9",
+    "path": "^0.12.7"
+  }
+}
