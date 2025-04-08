@@ -3,11 +3,12 @@ const axios = require("axios");
 const express = require("express");
 
 // Configuration - Replace these with your values
-const subscriptionId = "c9fa0ae6-4e78-4208-9a51-fec8a34b9270";
-const resourceGroupName = "ECR";
-const emailServiceName = "b2b-comm-test";
-const newDomainName = "test.com"; // e.g., "example.com"
-const endpoint = "https://b2b-comm-test.unitedstates.communication.azure.com";
+// Load environment variables
+require('dotenv').config();
+
+const subscriptionId = process.env.SUBSCRIPTION_ID 
+const emailServiceName = process.env.EMAIL_SERVICE_NAME ;
+
 
 // Initialize credentials
 const credential = new DefaultAzureCredential();
@@ -16,7 +17,7 @@ const credential = new DefaultAzureCredential();
 async function listDomains() {
   try {
     console.log("Retrieving existing domains...");
-    const url = 'https://management.azure.com/subscriptions/c9fa0ae6-4e78-4208-9a51-fec8a34b9270/resourceGroups/ECR/providers/Microsoft.Communication/emailServices/email-test/domains?api-version=2023-04-01'
+    const url = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Communication/emailServices/${emailServiceName}/domains?api-version=2023-04-01`;
 
     const token = await credential.getToken("https://management.azure.com/.default");
     if (!token || !token.token) {
@@ -66,7 +67,7 @@ async function getDomain(domainName) {
 async function createOrUpdateDomain(domainName) {
   try {
     console.log(`Creating or updating domain: ${domainName}...`);
-    const resourceId = `/subscriptions/c9fa0ae6-4e78-4208-9a51-fec8a34b9270/resourceGroups/ECR/providers/Microsoft.Communication/emailServices/email-test/domains/${domainName}`;
+    const resourceId = `/subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Communication/emailServices/${emailServiceName}/domains/${domainName}`;
     const url = `https://management.azure.com${resourceId}?api-version=2023-04-01`;
     const domainParameters = {
       location: "global",
