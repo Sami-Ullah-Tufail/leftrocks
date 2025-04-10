@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const subscriptionId = process.env.SUBSCRIPTION_ID 
 const emailServiceName = process.env.EMAIL_SERVICE_NAME ;
-
+const resourceGroupName = process.env.RESOURCE_GROUP_NAME;
 
 // Initialize credentials
 const credential = new DefaultAzureCredential();
