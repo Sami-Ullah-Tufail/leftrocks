@@ -1,0 +1,21 @@
+const mongoose = require('mongoose');
+
+const userDomainSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  domain: {
+    type: String,
+    required: true
+  },
+  domainId: {
+    type: String,
+    required: true
+  }
+});
+
+const UserDomain = mongoose.model('UserDomain', userDomainSchema);
+
+module.exports = UserDomain;
