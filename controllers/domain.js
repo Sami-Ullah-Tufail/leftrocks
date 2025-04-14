@@ -5,7 +5,7 @@ const UserDomain = require('../models/userDomain');
 
 router.post('/create', async (req, res) => {
   try {
-    const { email, name, region = 'us-east-1' } = req.body;
+    const { org, name, region = 'us-east-1' } = req.body;
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -14,7 +14,7 @@ router.post('/create', async (req, res) => {
     const userDomain = new UserDomain({
       domain: name,
       domainId: domain.data.id,
-      email,
+      org,
     });
 
     await userDomain.save();
@@ -33,10 +33,10 @@ router.post('/create', async (req, res) => {
 
 router.get('/get', async (req, res) => {
   try {
-    const { email, domain } = req.body;
+    const { org, domain } = req.body;
 
-    // Find the user domain object with matching email and domain
-    const userDomain = await UserDomain.findOne({ email, domain });
+    // Find the user domain object with matching org and domain
+    const userDomain = await UserDomain.findOne({ org, domain });
     if (!userDomain) {
       return res.status(403).json({ error: 'You are not authorized to access this domain' });
     }
@@ -53,12 +53,12 @@ router.get('/get', async (req, res) => {
 
 router.post('/verify', async (req, res) => {
   try {
-    const { email, domain } = req.body;
+    const { org, domain } = req.body;
 
-    // Find the user domain object with matching email and domain
-    const userDomain = await UserDomain.findOne({ email, domain });
+    // Find the user domain object with matching org and domain
+    const userDomain = await UserDomain.findOne({ org, domain });
     if (!userDomain) {
-      return res.status(404).json({ error: 'Domain not found for the provided email and domain' });
+      return res.status(404).json({ error: 'Domain not found for the provided org and domain' });
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
@@ -73,10 +73,10 @@ router.post('/verify', async (req, res) => {
 
 router.patch('/update', async (req, res) => {
   try {
-    const { email, domain, updateOptions } = req.body;
+    const { org, domain, updateOptions } = req.body;
 
-    // Find the user domain object with matching email and domain
-    const userDomain = await UserDomain.findOne({ email, domain });
+    // Find the user domain object with matching org and domain
+    const userDomain = await UserDomain.findOne({ org, domain });
     if (!userDomain) {
       return res.status(404).json({ error: 'Domain not found' });
     }
@@ -109,12 +109,12 @@ router.get('/list', async (req, res) => {
 
 router.delete('/delete', async (req, res) => {
   try {
-    const { email, domain } = req.body;
+    const { org, domain } = req.body;
 
-    // Find the user domain object with matching email and domain
-    const userDomain = await UserDomain.findOne({ email, domain });
+    // Find the user domain object with matching org and domain
+    const userDomain = await UserDomain.findOne({ org, domain });
     if (!userDomain) {
-      return res.status(404).json({ error: 'Domain not found for the provided email and domain' });
+      return res.status(404).json({ error: 'Domain not found for the provided org and domain' });
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);

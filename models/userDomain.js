@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userDomainSchema = new mongoose.Schema({
-  email: {
+  org: {
     type: String,
     required: true,
     unique: true
