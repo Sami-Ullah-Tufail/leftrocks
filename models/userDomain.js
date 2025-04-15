@@ -4,7 +4,6 @@ const userDomainSchema = new mongoose.Schema({
   org: {
     type: String,
     required: true,
-    unique: true
   },
   domain: {
     type: String,
