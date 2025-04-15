@@ -9,7 +9,7 @@ router.post('/create', async (req, res) => {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const domain = await resend.domains.create({ name });
+    const domain = await resend.domains.create({ name:name });
     console.log("456789765467890876546789",domain)
     const userDomain = new UserDomain({
       domain: name,
@@ -33,21 +33,21 @@ router.post('/create', async (req, res) => {
 
 router.get('/get', async (req, res) => {
   try {
-    const { org, domain } = req.body;
+    const { org } = req.body;
 
-    // Find the user domain object with matching org and domain
-    const userDomain = await UserDomain.findOne({ org, domain });
-    if (!userDomain) {
-      return res.status(403).json({ error: 'You are not authorized to access this domain' });
-    }
+    // Find all user domain objects with the given org
+    const userDomains = await UserDomain.find({ org });
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    const domainData = await resend.domains.get(userDomain.domainId);
+    // Get the domain data for each user domain
+    const domainData = await Promise.all(userDomains.map(async (userDomain) => {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      return await resend.domains.get(userDomain.domainId);
+    }));
 
     res.json(domainData);
   } catch (error) {
-    console.error('Error retrieving domain:', error);
-    res.status(500).json({ error: 'Failed to retrieve domain' });
+    console.error('Error retrieving domains:', error);
+    res.status(500).json({ error: 'Failed to retrieve domains' });
   }
 });
 
